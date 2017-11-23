@@ -1,4 +1,8 @@
 <?php
+
+//Your user id
+define('VK_ID', intval($argv[1]));
+
 function decode($str){
   $vals = explode("#", explode("?extra=", $str)[1]);
   $tstr = vk_o($vals[0]);
@@ -13,6 +17,7 @@ function decode($str){
       case "r": $tstr = vk_r($tstr, $args_arr[0]); break;
       case "x": $tstr = vk_x($tstr, $args_arr[0]); break;
       case "s": $tstr = vk_s($tstr, $args_arr[0]); break;
+      case "i": $tstr = vk_i($tstr, $args_arr[0]); break;
     }
   }
   return $tstr;
@@ -46,8 +51,8 @@ function vk_s($str, $start){
     $cur = abs($start);
     $shuffle_pos = array();
     for($i = $len - 1; $i >= 0; $i--){
-      $cur += $i;
-      $shuffle_pos[$i] = $cur % $len;
+      $cur = (($len * ($i + 1)) ^ $cur + $i) % $len;
+      $shuffle_pos[$i] = $cur;
     }
     for($i = 1; $i < $len; $i++){
       $offset = $shuffle_pos[$len - $i - 1];
@@ -57,6 +62,10 @@ function vk_s($str, $start){
     }
   }
   return $str;
+}
+
+function vk_i($str, $i){
+  return vk_s($str, $i ^ VK_ID);
 }
 
 function vk_v($str){
@@ -94,5 +103,5 @@ function vk_x($str, $i){
   return $result;
 }
 
-echo decode($argv[1]);
+echo decode($argv[2]);
 ?>
