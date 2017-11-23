@@ -10,6 +10,9 @@ ops — массив объектов с операциями.
   xor — исключающее или, аргумент 1 — строка,
     первый символ которой '\x00'-'\xFF' кроме "\x09" и "\x11"
   shuffle — перемешивание строки, аргумент 1 — число
+  shuffle_id — аналогично предыдущей операции, но используется
+    исключающее или аргумента с id пользователя ВК
+id - id пользователя ВК для операции shuffle_id
 Пример:
   encode("http://toster.ru",
    [
@@ -18,13 +21,15 @@ ops — массив объектов с операциями.
      {"name":"xor", "args":["1"]},
      {"name":"reverse"},
      {"name":"shuffle", "args":[1000]},
-     {"name":"shuffle", "args":[-11]}
-   ]
+     {"name":"shuffle", "args":[-11]},
+     {"name":"shuffle_id", "args":[22]}
+   ],
+   12345
   )
-Результат: ["oNr0CNrWl2vOCM8UC3qVDq", "EaSXcxilmtmWcxGlmqL2cxmlmtaWmaLZcYOXmq"]
+Результат: ["C3rOlZPOCNr0CNaVlM91zq", "EaSXcxilmtmWcxGlmqL2cxmlmtaWmaLZcYOXmqLPcZiY"]
 */
-function encode(str, ops){
-    var op_map = {"reverse": "v", "caesar": "r", "xor": "x", "shuffle": "s"};
+function encode(str, ops, vk_id){
+    var op_map = {"reverse": "v", "caesar": "r", "xor": "x", "shuffle": "s", "shuffle_id": "i"};
     var proc_ops = [];
     for(var i = 0; i < ops.length; i++){
       switch(ops[i]["name"]){
@@ -32,6 +37,7 @@ function encode(str, ops){
         case "caesar": str = crypt_caesar(str, -ops[i]["args"][0]); break;
         case "xor": str = crypt_xor(str, ops[i]["args"][0]); break;
         case "shuffle": str = shuffle(str, ops[i]["args"][0]); break;
+        case "shuffle_id": str = shuffle(str, ops[i]["args"][0] ^ vk_id); break;
       }
       var proc_op = [];
       proc_op.push(op_map[ops[i]["name"]]);
@@ -106,9 +112,9 @@ function shuffle(str, arg){
   var cur = Math.abs(arg);
   var shuffle_pos = [];
   for(var i = len - 1; i >= 0; i--){
-    cur += i;
-    shuffle_pos.unshift(cur % len);
-	}
+    cur = (len * (i + 1) ^ (cur + i)) % len;
+    shuffle_pos.unshift(cur);
+  }
   var strArr = str.split('');
   for(var i = 1; i < len; i++){
     var offset = shuffle_pos[i - 1];
