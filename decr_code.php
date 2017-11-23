@@ -88,7 +88,7 @@ function vk_x($str, $i){
   $xor_val = ord($i[0]);
   $str_len = strlen($str);
   $result = "";
-  for($i=0; $i<$str_len; $i++){
+  for($i = 0; $i < $str_len; $i++){
     $result .= chr(ord($str[$i]) ^ $xor_val);
   }
   return $result;
