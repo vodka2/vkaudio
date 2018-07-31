@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Шифрование URI алгоритмом ВКонтакте</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.16.0/vuedraggable.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/purecss@1.0.0/build/pure-min.css"/>
+
+    <script src="decode.js"></script>
+
+    <script src="encode.js"></script>
+
+    <script src="ui.js"></script>
+
+    <script type="text/x-template" id="op-template">
+        <div class="opWrap">
+            <form class="op pure-form" v-on:submit.prevent>
+                <img class="dragHandle" src="img/drag_handle.png"/>
+                <select v-model="type" @change="changeType($event.target.options[$event.target.selectedIndex].value)">
+                    <option v-for="option in options" v-bind:value="option.value">
+                        {{ option.name }}
+                    </option>
+                </select>
+                <input
+                       v-bind:class="haveArgs ? '' : 'invisible'"
+                       v-bind:type="isNum ? 'number' : 'text'"
+                       v-bind:value="haveArgs ? arg : ''" class="valInp" @input="changeArg($event.target.value)"/>
+                <input class="delImage" type="image" src="img/delete.png" @click="remove"/>
+            </form>
+            <div class="error" v-if="error.haveError && displayerr">{{error.errorMsg}}</div>
+        </div>
+    </script>
+
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="main">
+    <form class="inputBlock pure-form" v-on:submit.prevent>
+        <div>
+            <div><label for="decodeVal">Зашифрованный URI:</label></div>
+            <textarea id="decodeVal" v-model="decodeVal" value="" class="uriTextarea" rows="4"></textarea>
+        </div>
+        <div><button  class="pure-button" @click="decode">Дешифровать</button></div>
+    </form>
+    <form class="inputBlock pure-form" v-on:submit.prevent>
+        <div>
+            <div><label for="encodeVal">Исходный URI:</label></div>
+            <textarea id="encodeVal" v-model="encodeVal" value="" class="uriTextarea" rows="4"></textarea>
+        </div>
+        <div><button class="pure-button" @click="encode">Шифровать</button></div>
+    </form>
+    <form class="inputBlock pure-form" v-on:submit.prevent>
+    <label for="vkId">VK ID: </label><input type="text" id="vkId" v-model="vkId"/>
+    </form>
+    <div class="inputBlock">
+        <div>Операции:</div>
+        <div class="drag">
+            <div v-if="ops.length == 0" class="noOps">
+                Отсутствуют
+            </div>
+            <div v-else>
+                <draggable :list="ops" class="opsList" :options="dragOptions" @clone="start" @end="end">
+                    <op v-for="(op, index) in ops"
+                        v-bind:type="op.type"
+                        v-on:change="change"
+                        v-on:remove="remove"
+                        v-bind:args="op.args"
+                        v-bind:displayerr="displayErr"
+                        v-bind:index="index">
+                    </op>
+                </draggable>
+            </div>
+        </div>
+    <div><button class="pure-button" @click="add">Добавить операцию</button></div>
+    </div>
+</div>
+</body>
+</html>

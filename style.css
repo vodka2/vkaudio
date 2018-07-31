@@ -1,0 +1,83 @@
+.chosen .error{
+    display: none;
+}
+
+.dragHandle{
+    cursor: move;
+}
+
+body{
+    background-color: white;
+    padding: 5px;
+}
+
+.uriTextarea{
+    display: block;
+    width: 100%;
+}
+
+.opsList{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.opWrap{
+    display: inline-flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.op > *{
+    margin-right: 2px;
+}
+
+.op {
+    background-color: #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    border-left: 1px solid #cfcccc;
+    border-right: 1px solid #cfcccc;
+}
+
+.op img, .op input[type=image]{
+    border-bottom:1px solid #cfcccc;
+}
+
+.opWrap:last-child .op img, .opWrap:last-child .op input[type=image]{
+    border-bottom-width: 0;
+}
+
+.placeholder .op{
+    background-color: #eaf2fe;
+}
+
+.error{
+    background-color: #fff4f4;
+    color: darkred;
+    margin-left: 10px;
+    padding: 2px 8px 2px 8px;
+    border-radius: 5px;
+}
+
+.noOps{
+    padding: 5px 5px 5px 0;
+}
+
+.inputBlock{
+    border-bottom: 1px dashed #ccc;
+    padding: 5px;
+    margin-bottom: 2px;
+}
+
+.valInp{
+    width: 10ch;
+}
+
+.delImage{
+    margin-left: auto;
+}
+
+.invisible{
+    visibility: hidden;
+}
