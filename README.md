@@ -2,6 +2,7 @@
 
  * `site_decr_code.js` — код расшифровки с `vk.com`
  * `decr_code.php` — аналогичный код на PHP
+ * `VkAudioUrlDecoder.java` — аналогичный код на Java
  * `enc_code.html` — код шифровки на JavaScript
  * `token_usage.php` — пример использования токена
 
